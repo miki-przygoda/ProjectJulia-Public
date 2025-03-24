@@ -6,8 +6,8 @@
 
 - 🔧 Modular cog-based command system
 - 🛠️ Utility commands: bot info, server info, uptime
-- 👋 Basic commands: hello, ping
-- ♻️ Background controller for restarting the bot remotely
+- 👋 Basic commands: info, ping
+- ♻️ Background controller (wrapper) for restarting the bot remotely
 - 🤖 OpenAI API support (coming soon)
 - 🧪 Designed for public use, customization, and clean command logic
 
@@ -47,7 +47,7 @@ Create a `.env` file and add your Discord bot token:
 DISCORD_TOKEN=your_token_here
 ```
 
-### 4. Run the bot controller (launches bot with restart management):
+### 4. Run the bot controller (wrapper) - (launches bot with restart management):
 
 ```bash
 python run.py
