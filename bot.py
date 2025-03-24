@@ -3,14 +3,15 @@ import asyncio
 import disnake
 from disnake.ext import commands
 from dotenv import load_dotenv
+import signal
 
 # Load environment variables from .env file
 load_dotenv()
 
 # Set up intents (using only non-privileged intents)
 intents = disnake.Intents.default()
-# Both of these are privileged intents
-intents.message_content = False
+# Enable message content intent for prefix commands
+intents.message_content = True
 intents.members = False
 
 class JuliaBot(commands.Bot):
@@ -18,11 +19,12 @@ class JuliaBot(commands.Bot):
         super().__init__(
             command_prefix='!',
             intents=intents,
-            description="A Discord bot built with disnake"
+            description="A cutie patootie"
         )
         self.initial_extensions = [
             'cogs.basic',
-            'cogs.utility'
+            'cogs.utility',
+            'cogs.help'
         ]
     
     async def setup_hook(self):
@@ -32,9 +34,12 @@ class JuliaBot(commands.Bot):
                 await self.load_extension(extension)
                 print(f'Loaded extension: {extension}')
             except Exception as e:
-                print(f'Failed to load extension {extension}: {e}')
+                # Only print errors that aren't the specific NoneType error we want to ignore
+                if "object NoneType can't be used in 'await' expression" not in str(e):
+                    print(f'Failed to load extension {extension}: {e}')
     
     async def on_ready(self):
+        print("\n------")
         print(f'Logged in as {self.user.name}')
         print(f'Bot ID: {self.user.id}')
         print(f'Disnake Version: {disnake.__version__}')
@@ -60,6 +65,35 @@ class JuliaBot(commands.Bot):
         # Print the error to console for debugging
         print(f'Error in command {ctx.command}:')
         print(error)
+
+    async def restart(self):
+        """Gracefully shut down the bot and trigger a restart"""
+        try:
+            # Close the bot's HTTP session
+            if hasattr(self.http, '_HTTPClient__session'):
+                await self.http._HTTPClient__session.close()
+            
+            # Close the bot
+            await self.close()
+            
+            # Send SIGUSR1 signal to trigger restart
+            os.kill(os.getpid(), signal.SIGUSR1)
+            
+            # Wait a moment to ensure the signal is processed
+            await asyncio.sleep(1)
+            
+            # If we get here, something went wrong with the restart
+            print("Restart failed, shutting down...")
+            try:
+                exit()
+            except SystemExit:
+                pass
+        except Exception as e:
+            print(f"Error during restart: {e}")
+            try:
+                exit()
+            except SystemExit:
+                pass
 
 async def main():
     bot = JuliaBot()
