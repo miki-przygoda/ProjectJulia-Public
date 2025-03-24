@@ -80,7 +80,7 @@ The bot is wrapped by a `run.py` controller that monitors for shutdown events an
 ## 🧠 OpenAI Integration (Planned)
 
 A future update will add:
-- !`!prompt` commands that send input to OpenAI and return responses
+- `!prompt` commands that send input to OpenAI and return responses
 
 ## 🧩 Extending Julia
 
