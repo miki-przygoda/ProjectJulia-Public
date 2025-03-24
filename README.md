@@ -1,93 +1,105 @@
 # ProjectJulia Discord Bot
 
-A feature-rich Discord bot built with disnake, a fork of discord.py.
+**ProjectJulia** is a modular, scalable Discord bot built using [Disnake](https://docs.disnake.dev/), designed for easy expansion and intelligent interaction. It includes core utilities, restart control, and plans for OpenAI-powered conversational commands.
 
-## Features
+## ✨ Features
 
-- Basic commands: hello, ping
-- Utility commands: server info, bot info
-- Modular cog-based command system for easy expansion
+- 🔧 Modular cog-based command system
+- 🛠️ Utility commands: bot info, server info, uptime
+- 👋 Basic commands: hello, ping
+- ♻️ Background controller for restarting the bot remotely
+- 🤖 OpenAI API support (coming soon)
+- 🧪 Designed for public use, customization, and clean command logic
 
-## Requirements
+## 📦 Requirements
 
-- Python 3.8 or higher (compatible with Python 3.13)
-- disnake 2.10.1 or higher
-- python-dotenv
+- Python 3.8 or higher
+- `disnake==2.10.1`
+- `python-dotenv==1.0.0`
 
-## Installation
+Install dependencies with:
 
-1. Clone this repository:
-   ```
-   git clone https://github.com/miki-przygoda/ProjectJulia-Public.git
-   cd ProjectJulia-Public
-   ```
-2. Create and activate a virtual envirement (recomended):
-   ```
-   python3 -m venv venv
+```bash
+pip install -r requirements.txt
+```
 
-   source venv/bin/activate
-   ```
+## 🚀 Getting Started
 
-3. Install required packages:
-   ```
-   pip install -r requirements.txt
-   ```
+### 1. Clone the repo:
 
-4. Set up your Discord bot:
-   - Go to [Discord Developer Portal](https://discord.com/developers/applications)
-   - Create a new application
-   - Go to the "Bot" tab and click "Add Bot"
-   - If you need to use message content or server members data:
-     - Under the "Privileged Gateway Intents" section, enable:
-       - Message Content Intent
-       - Server Members Intent
-     - Update the intents in bot.py to set these to True
-   - Copy your bot token
+```bash
+git clone https://github.com/miki-przygoda/ProjectJulia-Public.git
+cd ProjectJulia-Public
+```
 
-5. Configure environment variables:
-   - Copy `.env.example` to `.env` (or create a new .env file)
-   - Add your bot token: `DISCORD_TOKEN=your_token_here`
+### 2. Set up a virtual environment (optional but recommended):
 
-6. Run the bot:
-   ```
-   python3 bot.py
-   ```
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+```
 
-## Adding the Bot to Your Server
+### 3. Add your environment variables:
 
-1. Go back to the Discord Developer Portal
-2. Navigate to the "OAuth2" tab then "URL Generator"
-3. Under "Scopes" select "bot"
-4. Under "Bot Permissions" select the permissions your bot needs
-   - Recommended minimum: Send Messages, Read Message History, Embed Links
-5. Copy the generated URL and open it in a browser
-6. Select the server you want to add the bot to
+Create a `.env` file and add your Discord bot token:
 
-## Commands
+```env
+DISCORD_TOKEN=your_token_here
+```
+
+### 4. Run the bot controller (launches bot with restart management):
+
+```bash
+python run.py
+```
+
+Or directly:
+
+```bash
+python bot.py
+```
+
+## 🔧 Commands
 
 Default prefix: `!`
 
-### Basic Commands
-- `!hello` - Bot greets you
-- `!ping` - Check bot's response time
+### General Commands
+- `!ping` – Measure bot latency
+- `!info` – Shows basic bot info
+- `!serverinfo` – Shows server details
+- `!help` – Lists available commands
 
-### Utility Commands
-- `!info` - Display information about the bot
-- `!serverinfo` - Display information about the current server
+### Owner Command
+- `!restart` – Restarts the bot safely (owner only) 
+    - This lets you make changes live and update it by saving and reseting, you dont need to stop it from running each time
 
-### Help
-- `!help` - Show all available commands
-- `!help [command]` - Show detailed information about a specific command
+## 🔁 Restart Management
 
-## Extending the Bot
+The bot is wrapped by a `run.py` controller that monitors for shutdown events and restarts the bot when necessary. This allows remote restarts via `!restart` without manually rebooting the process.
 
-To add new commands, create a new cog file in the `cogs` directory. Use the existing cogs as templates.
+## 🧠 OpenAI Integration (Planned)
 
-### Important Notes
-- If you're using Python 3.13, the bot is configured to use minimal intents to avoid issues with the more recent Python versions.
-- If you need message content or member information, you must enable the privileged intents in the Discord Developer Portal AND update the bot.py file.
+A future update will add:
+- !`!prompt` commands that send input to OpenAI and return responses
 
-## License
+## 🧩 Extending Julia
 
-MIT
- 
+To add a new feature:
+1. Create a `.py` file in the cogs folder (e.g. `julia/cogs/your_feature.py`)
+2. Define a class with `commands.Cog`
+3. Register it in `basic.py` or in `bot.py` dynamically
+
+## 🛡️ Permissions
+
+Make sure to enable the following in the [Discord Developer Portal](https://discord.com/developers/applications):
+- ✅ Message Content Intent
+- ✅ Server Members Intent (if needed)
+
+## 🪪 License
+
+This project is licensed under the MIT License.
+Feel free to fork and build your own version.
+
+---
+
+**Created by Mikolaj Mikuliszyn**
