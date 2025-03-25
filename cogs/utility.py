@@ -66,9 +66,9 @@ class Utility(commands.Cog):
     @restart.error
     async def restart_error(self, ctx, error):
         if isinstance(error, commands.NotOwner):
+            print(f"User {ctx.author} ({ctx.author.id}) attempted to restart the bot")
             await ctx.send("You do not have permission to restart this bot.")
-        else:
-            raise error  # re-raise any other unexpected errors
+
 
 def setup(bot):
     bot.add_cog(Utility(bot)) 

@@ -1,6 +1,6 @@
 import disnake
 from disnake.ext import commands
-
+import os
 class Basic(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -17,20 +17,18 @@ class Basic(commands.Cog):
 
 
     @commands.command(name="prompt")
-    async def prompt(self, ctx, *, prompt: str):
-        """Prompts the bot to do something"""
-        if not prompt:
-            await ctx.send("Please provide a prompt.")
+    async def prompt(self, ctx, *, prompt: str = None):
+        """Used to send a prompt to the bot"""
+        if prompt is None:
+            await ctx.send("Why did you leave it empty?")
             return
         
-        if not isinstance(prompt, str):
-            await ctx.send("Please provide a prompt that is a string.")
-            return
-        
-        await ctx.send(f"{prompt}")
-        
-        
-
+        if os.getenv("OPENAI_API_ENABLED") == "true":
+            await ctx.send("OpenAI API is enabled.")
+            await ctx.send("Prompt sent successfully.")
+        else:
+            await ctx.send("OpenAI API is disabled.")
+            await ctx.send("So I couldn't send it through 😓")
 
 def setup(bot):
     bot.add_cog(Basic(bot)) 
