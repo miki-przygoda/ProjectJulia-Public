@@ -4,9 +4,19 @@ import disnake
 from disnake.ext import commands
 from dotenv import load_dotenv
 import signal
+import importlib
 
 # Load environment variables from .env file
 load_dotenv()
+
+modules = [
+'cogs.basic',
+'cogs.utility',
+'cogs.help',
+'OpenAI.managePrompt',
+'OpenAI.personality'
+
+]
 
 # Set up intents (using only non-privileged intents)
 intents = disnake.Intents.default()
@@ -21,11 +31,7 @@ class JuliaBot(commands.Bot):
             intents=intents,
             description="A cutie patootie"
         )
-        self.initial_extensions = [
-            'cogs.basic',
-            'cogs.utility',
-            'cogs.help'
-        ]
+        self.initial_extensions = modules
     
     async def setup_hook(self):
         # Load extensions
@@ -68,7 +74,17 @@ class JuliaBot(commands.Bot):
 
     async def restart(self):
         """Gracefully shut down the bot and trigger a restart"""
+        load_dotenv(override=True)
+
         try:
+            # Reload OpenAI modules
+            for module in modules:
+                try:
+                    importlib.reload(importlib.import_module(module))
+                    print(f'Reloaded module: {module}')
+                except Exception as e:
+                    print(f'Failed to reload module {module}: {e}')
+            
             # Close the bot's HTTP session
             if hasattr(self.http, '_HTTPClient__session'):
                 await self.http._HTTPClient__session.close()
@@ -101,6 +117,7 @@ async def main():
     await bot.setup_hook()
     # Run the bot with the token
     await bot.start(os.getenv('DISCORD_TOKEN'))
+    # Reload OpenAI 
 
 if __name__ == "__main__":
     asyncio.run(main()) 

@@ -1,6 +1,9 @@
 import disnake
 from disnake.ext import commands
 import os
+from OpenAI.managePrompt import handle_prompt
+
+
 class Basic(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -22,13 +25,21 @@ class Basic(commands.Cog):
         if prompt is None:
             await ctx.send("Why did you leave it empty?")
             return
-        
+
         if os.getenv("OPENAI_API_ENABLED") == "true":
             await ctx.send("OpenAI API is enabled.")
-            await ctx.send("Prompt sent successfully.")
+            
+            try:
+                response = handle_prompt(prompt)
+                await ctx.send(response)
+            except Exception as e:
+                await ctx.send("Something went wrong with the OpenAI API. Probably forgot the API key dummy...")
+                print(f"Error: {e}")
         else:
             await ctx.send("OpenAI API is disabled.")
             await ctx.send("So I couldn't send it through 😓")
+
+    
 
 def setup(bot):
     bot.add_cog(Basic(bot)) 
