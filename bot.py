@@ -9,14 +9,37 @@ import importlib
 # Load environment variables from .env file
 load_dotenv()
 
-modules = [
-'cogs.basic',
-'cogs.utility',
-'cogs.help',
-'OpenAI.managePrompt',
-'OpenAI.personality'
+def detect_api_handler_modules():
+    """Automatically detect all Python modules in apiHandler and its subdirectories."""
+    api_modules = []
+    api_handler_dir = 'apiHandler'
+    
+    # Walk through the apiHandler directory and its subdirectories
+    for root, dirs, files in os.walk(api_handler_dir):
+        # Skip __pycache__ directories
+        if '__pycache__' in dirs:
+            dirs.remove('__pycache__')
+        
+        # Convert directory path to module path
+        module_path = root.replace(os.sep, '.')
+        
+        # Add Python files as modules
+        for file in files:
+            if file.endswith('.py') and not file.startswith('__'):
+                module_name = f"{module_path}.{file[:-3]}"
+                api_modules.append(module_name)
+    
+    return api_modules
 
+# Core modules that should always be loaded
+core_modules = [
+    'cogs.basic',
+    'cogs.utility',
+    'cogs.help',
 ]
+
+# Combine core modules with automatically detected API handler modules
+modules = core_modules + detect_api_handler_modules()
 
 # Set up intents (using only non-privileged intents)
 intents = disnake.Intents.default()
