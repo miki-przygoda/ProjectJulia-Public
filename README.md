@@ -11,12 +11,18 @@
 - 🤖 OpenAI API support
 - 🧪 Designed for public use, customization, and clean command logic
 
+## ⏲️ Future Features
+
+- 📼 Live changes to what AI model is used `!switch`
+- 🤖 Anthropic API support
+
 ## 📦 Requirements
 
 - Python 3.8 or higher
 - `disnake==2.10.1`
 - `python-dotenv==1.0.0`
 - `openai` (for OpenAI integration)
+- `anthropic` (for Anthropic integration)
 
 Install dependencies with:
 
@@ -44,11 +50,7 @@ source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 
 Create a `.env` file and add your Discord bot token:
 
-```env
-DISCORD_TOKEN=your_token_here
-OPENAI_API_ENABLED=true  # Optional: for OpenAI integration
-OPENAI_API_KEY=your_openai_key_here  # Required if OpenAI is enabled
-```
+`See .env.example` for what it should look like
 
 ### 4. Run the bot controller (wrapper) - (launches bot with restart management):
 
@@ -106,8 +108,8 @@ Make sure to enable the following in the [Discord Developer Portal](https://disc
 
 ## 🪪 License
 
-This project is licensed under the MIT License.
-Feel free to fork and build your own version.
+This project is licensed under the Attribution License.
+You are free to use, modify, and distribute this code as long as you provide appropriate credit to Mikolaj Mikuliszyn as the original creator.
 
 ---
 
